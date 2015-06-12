@@ -119,6 +119,7 @@ public class MainActivity extends ActionBarActivity {
                 int data1 = buffer.getInt();
                 int data2 = buffer.getInt();
                 int data3 = buffer.getInt();
+                int timestamp_ms = buffer.getShort();
 
                 if (mDisplayText.length() > 0) {
                     String eol = System.getProperty("line.separator");
@@ -126,13 +127,20 @@ public class MainActivity extends ActionBarActivity {
                 }
                 //mDisplayText.append(byteArrayToHex(data_array));
                 //mDisplayText.append("|");
-                mDisplayText.append(getLongAsTimestamp(timestamp));
+                mDisplayText.append(getLongAsTimestamp(timestamp, timestamp_ms));
                 mDisplayText.append(",");
                 mDisplayText.append(id);
                 mDisplayText.append(",");
                 mDisplayText.append(data1);
                 mDisplayText.append(",");
-                mDisplayText.append(data2);
+                if (100 <= id && id <= 102) {
+                    if (data2 < 0)
+                        mDisplayText.append(data2);
+                    else
+                        mDisplayText.append("-");
+                } else {
+                    mDisplayText.append(data2);
+                }
                 mDisplayText.append(",");
                 mDisplayText.append(data3);
                 mDisplayText.append("|");
@@ -165,9 +173,9 @@ public class MainActivity extends ActionBarActivity {
                                 mDisplayText.append(" error " + data2);
                             } else {
                                 if (data1 == 0)
-                                    mDisplayText.append(" for " + getLongAsTimestamp(data3));
+                                    mDisplayText.append(" for " + getLongAsTimestamp(data3, 0));
                                 else
-                                    mDisplayText.append(" resched " + getLongAsTimestamp(data3));
+                                    mDisplayText.append(" resched " + getLongAsTimestamp(data3, 0));
                             }
                         } break;
                         case 1:         // canceled
@@ -196,8 +204,8 @@ public class MainActivity extends ActionBarActivity {
         textView.setText(mDisplayText.toString());
     }
 
-    private String getLongAsTimestamp(int l) {
-        return DATE_FORMAT.format(new Date(l * 1000L)).toString();
+    private String getLongAsTimestamp(int l, int ms) {
+        return DATE_FORMAT.format(new Date(l * 1000L)).toString() + String.format(".%04d", ms);
     }
 
     @Override
