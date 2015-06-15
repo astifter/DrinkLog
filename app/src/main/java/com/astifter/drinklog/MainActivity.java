@@ -173,9 +173,9 @@ public class MainActivity extends ActionBarActivity {
                                 mDisplayText.append(" error " + data2);
                             } else {
                                 if (data1 == 0)
-                                    mDisplayText.append(" for " + getLongAsTimestamp(data3, 0));
+                                    mDisplayText.append(" for " + getLongAsTimestamp(data3));
                                 else
-                                    mDisplayText.append(" resched " + getLongAsTimestamp(data3, 0));
+                                    mDisplayText.append(" resched " + getLongAsTimestamp(data3));
                             }
                         } break;
                         case 1:         // canceled
@@ -204,8 +204,15 @@ public class MainActivity extends ActionBarActivity {
         textView.setText(mDisplayText.toString());
     }
 
+    private String getLongAsTimestamp(int l) {
+        return getLongAsTimestamp(l, -1);
+    }
     private String getLongAsTimestamp(int l, int ms) {
-        return DATE_FORMAT.format(new Date(l * 1000L)).toString() + String.format(".%04d", ms);
+        String retval = DATE_FORMAT.format(new Date(l * 1000L)).toString();
+        if (ms >= 0) {
+            retval +=  String.format(".%04d", ms);
+        }
+        return retval;
     }
 
     @Override
