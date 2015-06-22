@@ -8,8 +8,8 @@ android {
         applicationId "com.astifter.drinklog"
         minSdkVersion 14
         targetSdkVersion 22
-        versionCode 1
-        versionName "0.9"
+        versionCode 3
+        versionName "1.0"
     }
     buildTypes {
         release {

@@ -202,6 +202,23 @@ public class MainActivity extends ActionBarActivity {
     private void updateUi() {
         TextView textView = (TextView) findViewById(R.id.main_activity_fragment_text_view);
         textView.setText(mDisplayText.toString());
+        textView.post(new Runnable() {
+            @Override
+            public void run() {
+                TextView mTextView = (TextView) findViewById(R.id.main_activity_fragment_text_view);
+                // Find the amount we need to scroll.  This works by
+                // asking the TextView's internal layout for the position
+                // of the final line and then subtracting the TextView's height.
+                final int lc = mTextView.getLineCount();
+                final int lt = mTextView.getLayout().getLineTop(lc);
+                final int scrollAmount = lt - mTextView.getHeight();
+
+                if (scrollAmount > 0)
+                    mTextView.scrollTo(0, scrollAmount);
+                else
+                    mTextView.scrollTo(0, 0);
+            }
+        });
     }
 
     private String getLongAsTimestamp(int l) {
